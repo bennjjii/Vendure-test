@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/stylesheets/style.css" />
+  </head>
+  <body>
+    <h1><%= title %></h1>
+    <p>Welcome to <%= title %></p>
+    <h3>Here are all our producis:</h3>
+    <% productList.forEach(element => { %>
+    <p><%= element.name %></p>
+    <br />
+    <p><%= element.description %></p>
+    <br />
+    <% }) %>
+  </body>
+</html>
