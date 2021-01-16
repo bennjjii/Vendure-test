@@ -1,1 +1,5 @@
 /* your styles go here */
+.productimage {
+  object-fit: cover;
+  height: 13rem;
+}

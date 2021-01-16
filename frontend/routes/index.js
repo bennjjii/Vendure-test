@@ -6,7 +6,7 @@ var router = express.Router();
 router.get("/", function (req, res, next) {
   axios
     .post("http://localhost:3000/shop-api", {
-      query: "{products{items{name,id,description}}}",
+      query: "{products{items{name,id,description,featuredAsset{source}}}}",
     })
     .then((res) => {
       return res.data.data.products.items;
@@ -20,7 +20,18 @@ router.get("/", function (req, res, next) {
 /* GET shop page */
 
 router.get("/shop", (req, res, next) => {
-  res.send(200);
+  axios
+    .post("http://localhost:3000/shop-api", {
+      query:
+        "{products{items{name,id,description,featuredAsset{source},variants{price}}}}",
+    })
+    .then((res) => {
+      return res.data.data.products.items;
+    })
+    .then((data) => {
+      console.log(data[0].variants);
+      res.render("shop2", { productList: data });
+    });
 });
 
 /* GET detail page */
