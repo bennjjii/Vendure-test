@@ -11,6 +11,7 @@ router.get("/", function (req, res, next) {
     .then((res) => {
       return res.data.data.products.items;
     })
+    .catch(console.log("Backend down"))
     .then((data) => {
       console.log(data);
       res.render("index", { title: "Express", productList: data });
@@ -36,8 +37,30 @@ router.get("/shop", (req, res, next) => {
 
 /* GET detail page */
 
-router.get("/detail/:id", (req, res, next) => {
-  res.status(200).send(req.params.id);
+router.get("/detail/:slug", (req, res, next) => {
+  axios
+    .post("http://localhost:3000/shop-api", {
+      query: `{product(slug: "allstar-sneakers") {
+          id
+            name
+            description
+            featuredAsset{
+              source
+            }
+          }
+        }`,
+    })
+    .then((res) => {
+      return res.data.data.product;
+    })
+    .then((data) => {
+      console.log(data);
+      res.render("detail", {
+        name: data.name,
+        description: data.description,
+        images: data.featuredAsset.source,
+      });
+    });
 });
 
 module.exports = router;
