@@ -1,18 +1,30 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title><%= title %></title>
-    <link rel="stylesheet" href="/stylesheets/style.css" />
-  </head>
+  <%- include('include/head'); %>
   <body>
-    <h1><%= title %></h1>
-    <p>Welcome to <%= title %></p>
-    <h3>Here are all our producis:</h3>
-    <% productList.forEach(element => { %>
-    <p><%= element.name %></p>
-    <br />
-    <p><%= element.description %></p>
-    <br />
-    <% }) %>
+    <div class="page-holder">
+      <%- include('include/header'); %> <%- include('include/modal'); %>
+      <div class="container">
+        <%- include('include/hero_shop'); %>
+        <section class="py-5">
+          <div class="container p-0">
+            <div class="row">
+              <%- include('include/sidebar'); %>
+              <div class="col-lg-9 order-1 order-lg-2 mb-5 mb-lg-0">
+                <%- include('include/sort_form'); %>
+                <div class="row">
+                  <% productList.forEach(element => { %> <%-
+                  include('include/shop_product', {name: element.name, asset:
+                  element.featuredAsset.source, price:
+                  element.variants[0].price, slug: element.slug}); %> <% }) %>
+                </div>
+                <%- include('include/pagination'); %>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+      <%- include('include/footer'); %> <%- include('include/scripts_css'); %>
+    </div>
   </body>
 </html>

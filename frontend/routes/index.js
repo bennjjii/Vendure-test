@@ -21,17 +21,18 @@ router.get("/", function (req, res, next) {
 /* GET shop page */
 
 router.get("/shop", (req, res, next) => {
+  let skip = 0;
+  req.query.page ? (skip = (req.query.page - 1) * 12) : (skip = 0);
   axios
     .post("http://localhost:3000/shop-api", {
-      query:
-        "{products{items{name,id,description,featuredAsset{source},variants{price}}}}",
+      query: `{products(options:{skip: ${skip}, take: 12}){items{name,id,description,featuredAsset{source},variants{price},slug}}}`,
     })
     .then((res) => {
       return res.data.data.products.items;
     })
     .then((data) => {
-      console.log(data[0].variants);
-      res.render("shop2", { productList: data });
+      console.log(req.query);
+      res.render("shop", { productList: data });
     });
 });
 
@@ -40,7 +41,7 @@ router.get("/shop", (req, res, next) => {
 router.get("/detail/:slug", (req, res, next) => {
   axios
     .post("http://localhost:3000/shop-api", {
-      query: `{product(slug: "allstar-sneakers") {
+      query: `{product(slug: "${req.params.slug}") {
           id
             name
             description

@@ -1,16 +1,30 @@
 /* your styles go here */
-/* .productimage {
+
+.productimage {
   object-fit: cover;
   height: 13rem;
 }
 
 .detailproductimage {
-  position: relative;
-  width: 100%;
-  padding-top: 100%;
+  height: 0;
+  width: 25%;
+  padding-bottom: 25%;
   object-fit: cover;
 }
 
 .detailproductimage img {
   object-fit: cover;
+}
+
+/* .owl-item {
+  height: 545px !important;
+}
+
+.owl-item a {
+  height: 545px !important;
 } */
+
+.owl-item img {
+  height: 100% !important;
+  object-fit: cover !important;
+}
