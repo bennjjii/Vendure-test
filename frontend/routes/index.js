@@ -1,6 +1,7 @@
 const { default: axios } = require("axios");
 var express = require("express");
 var router = express.Router();
+var queryBuilder = require("../bin/queryBuilder");
 
 /* GET home page. */
 router.get("/", function (req, res, next) {
@@ -23,6 +24,7 @@ router.get("/", function (req, res, next) {
 router.get("/shop", (req, res, next) => {
   let skip = 0;
   req.query.page ? (skip = (req.query.page - 1) * 12) : (skip = 0);
+  console.log(queryBuilder(12, 0, 3));
   axios
     .post("http://localhost:3000/shop-api", {
       query: `{products(options:{skip: ${skip}, take: 12}){items{name,id,description,featuredAsset{source},variants{price},slug}}}`,
