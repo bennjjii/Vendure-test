@@ -24,16 +24,17 @@ router.get("/", function (req, res, next) {
 router.get("/shop", (req, res, next) => {
   let skip = 0;
   req.query.page ? (skip = (req.query.page - 1) * 12) : (skip = 0);
-  console.log(queryBuilder(12, 0, 3));
+  console.log(">>>" + queryBuilder(12, 0, 0) + "<<<");
   axios
     .post("http://localhost:3000/shop-api", {
-      query: `{products(options:{skip: ${skip}, take: 12}){items{name,id,description,featuredAsset{source},variants{price},slug}}}`,
+      query: queryBuilder(12, 0, 0),
     })
     .then((res) => {
-      return res.data.data.products.items;
+      console.log(res.data.data.search.items);
+      return res.data.data.search.items;
     })
     .then((data) => {
-      console.log(req.query);
+      //console.log(req.query);
       res.render("shop", { productList: data });
     });
 });
