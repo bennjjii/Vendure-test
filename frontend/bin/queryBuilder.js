@@ -37,6 +37,7 @@ function queryBuilder(
   } take: ${pageSize}, skip: ${
     page * pageSize
   }, groupByProduct: true${sortString}}) {
+          totalItems
           items {
             productId,
             sku,

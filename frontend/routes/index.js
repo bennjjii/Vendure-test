@@ -21,22 +21,31 @@ router.get("/", function (req, res, next) {
 
 /* GET shop page */
 
-router.get("/shop", (req, res, next) => {
-  let skip = 0;
-  req.query.page ? (skip = (req.query.page - 1) * 12) : (skip = 0);
+router.get("/shop", async (req, res) => {
+  let pageLength = 12;
   console.log(">>>" + queryBuilder(12, 0, 0) + "<<<");
-  axios
-    .post("http://localhost:3000/shop-api", {
-      query: queryBuilder(12, 0, 0),
-    })
-    .then((res) => {
-      console.log(res.data.data.search.items);
-      return res.data.data.search.items;
-    })
-    .then((data) => {
-      //console.log(req.query);
-      res.render("shop", { productList: data });
-    });
+  let productList = await axios.post("http://localhost:3000/shop-api", {
+    query: queryBuilder(pageLength, req.query.page ? req.query.page - 1 : 0, 0),
+  });
+
+  console.log(productList.data.data.search);
+
+  res.render("shop", {
+    productList: productList.data.data.search.items,
+    page: req.query.page ? req.query.page : null,
+    totalItems: productList.data.data.search.totalItems,
+    pageLength: pageLength,
+  });
+});
+
+/* GET category */
+
+router.get("/category/:slug", async (req, res) => {
+  let products = await axios.post("http://localhost:3000/shop-api", {
+    query: queryBuilder(12, 0, 0, req.params.slug),
+  });
+  console.log(products.data.data.search.items);
+  res.render("shop", { productList: products.data.data.search.items });
 });
 
 /* GET detail page */
