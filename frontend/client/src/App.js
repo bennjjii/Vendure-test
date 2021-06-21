@@ -12,15 +12,22 @@ import {
   useLocation,
 } from "react-router-dom";
 import Landing from "./components/Landing";
+import Shop from "./components/Shop";
+import Cart from "./components/Cart";
+import Checkout from "./components/Checkout";
+import Detail from "./components/Detail";
 
 function App() {
   return (
     <Router>
       <div className="app">
-        <Landing />
-        {/* <Switch>
-          <Route path="" exact component={Landing} />
-        </Switch> */}
+        <Switch>
+          <Route path="/" exact component={Landing} />
+          <Route path="/shop" exact component={Shop} />
+          <Route path="/cart" exact component={Cart} />
+          <Route path="/checkout" exact component={Checkout} />
+          <Route path="/detail" exact component={Detail} />
+        </Switch>
       </div>
     </Router>
   );
