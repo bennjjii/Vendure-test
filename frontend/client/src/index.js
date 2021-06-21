@@ -4,6 +4,18 @@ import "./css/index.css";
 import { ProvideContext } from "./services/contextService";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
+import {
+  ApolloClient,
+  InMemoryCache,
+  ApolloProvider,
+  useQuery,
+  gql,
+} from "@apollo/client";
+
+const client = new ApolloClient({
+  uri: "http://localhost:3000",
+  cache: new InMemoryCache(),
+});
 
 ReactDOM.render(
   <React.StrictMode>

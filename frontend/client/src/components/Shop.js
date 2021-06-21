@@ -1,5 +1,6 @@
 import Header from "./Header";
 import ShopProduct from "./ShopProduct";
+import ResultsList from "./ResultsList";
 import Footer from "./Footer";
 
 const Shop = (props) => {
@@ -444,77 +445,71 @@ const Shop = (props) => {
                     </ul>
                   </div>
                 </div>
-                <div className="row">
-                  <ShopProduct
-                    name="Kui Ye Chen’s AirPods"
-                    imgSrc="img/product-1.jpg"
-                    price="250"
-                  />
-                  <ShopProduct
-                    name="Air Jordan 12 gym red"
-                    imgSrc="img/product-2.jpg"
-                    price="300"
-                  />
-
-                  <ShopProduct
-                    name="Cyan cotton t-shirt"
-                    imgSrc="img/product-3.jpg"
-                    price="25"
-                  />
-
-                  <ShopProduct
-                    name="Timex Unisex Originals"
-                    imgSrc="img/product-4.jpg"
-                    price="351"
-                  />
-
-                  <ShopProduct
-                    name="Red digital smartwatch"
-                    imgSrc="img/product-5.jpg"
-                    price="250"
-                  />
-                  <ShopProduct
-                    name="Nike air max 95"
-                    imgSrc="img/product-6.jpg"
-                    price="300"
-                  />
-
-                  <ShopProduct
-                    name="Joemalone Women prefume"
-                    imgSrc="img/product-7.jpg"
-                    price="25"
-                  />
-                  <ShopProduct
-                    name="Apple Watch"
-                    imgSrc="img/product-8.jpg"
-                    price="351"
-                  />
-
-                  <ShopProduct
-                    name="Men silver Byron Watch"
-                    imgSrc="img/product-9.jpg"
-                    price="351"
-                  />
-
-                  <ShopProduct
-                    name="Polaroid one step camera"
-                    imgSrc="img/product-10.jpg"
-                    price="351"
-                    new
-                  />
-
-                  <ShopProduct
-                    name="Gray Nike running shoes"
-                    imgSrc="img/product-11.jpg"
-                    price="351"
-                  />
-
-                  <ShopProduct
-                    name="Black DSLR lense"
-                    imgSrc="img/product-12.jpg"
-                    price="351"
-                  />
-                </div>
+                <ResultsList
+                  productList={[
+                    {
+                      name: "Kui Ye Chen’s AirPods",
+                      imgSrc: "img/product-1.jpg",
+                      price: "250",
+                    },
+                    {
+                      name: "Air Jordan 12 gym red",
+                      imgSrc: "img/product-2.jpg",
+                      price: "300",
+                    },
+                    {
+                      name: "Cyan cotton t-shirt",
+                      imgSrc: "img/product-3.jpg",
+                      price: "25",
+                    },
+                    {
+                      name: "Timex Unisex Originals",
+                      imgSrc: "img/product-4.jpg",
+                      price: "351",
+                    },
+                    {
+                      name: "Red digital smartwatch",
+                      imgSrc: "img/product-5.jpg",
+                      price: "250",
+                    },
+                    {
+                      name: "Nike air max 95",
+                      imgSrc: "img/product-6.jpg",
+                      price: "300",
+                    },
+                    {
+                      name: "Joemalone Women perfume",
+                      imgSrc: "img/product-7.jpg",
+                      price: "25",
+                    },
+                    {
+                      name: "Apple Watch",
+                      imgSrc: "img/product-8.jpg",
+                      price: "351",
+                    },
+                    {
+                      name: "Men silver Byron Watch",
+                      imgSrc: "img/product-9.jpg",
+                      price: "351",
+                    },
+                    {
+                      name: "Polaroid one step camera",
+                      imgSrc: "img/product-10.jpg",
+                      price: "351",
+                      new: true,
+                    },
+                    {
+                      name: "Gray Nike running shoes",
+                      imgSrc: "img/product-11.jpg",
+                      price: "351",
+                    },
+                    {
+                      name: "Black DSLR lense",
+                      imgSrc: "img/product-12.jpg",
+                      price: "351",
+                    },
+                  ]}
+                />
 
                 <nav aria-label="Page navigation example">
                   <ul className="pagination justify-content-center justify-content-lg-end">

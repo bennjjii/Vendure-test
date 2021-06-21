@@ -5,7 +5,7 @@
   "scripts": {
     "run:server": "ts-node ./src/index.ts",
     "run:worker": "ts-node ./src/index-worker.ts",
-    "run:client": "cd ../frontend && nodemon",
+    "run:client": "cd ../frontend/client && npm start",
     "start": "concurrently npm:run:*",
     "build": "tsc",
     "migration:generate": "ts-node migration generate",
