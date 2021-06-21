@@ -1,22 +1,27 @@
-const { default: axios } = require("axios");
+const axios = require("axios").default;
 var express = require("express");
 var router = express.Router();
 var queryBuilder = require("../bin/queryBuilder");
+const axiosCookieJarSupport = require("axios-cookiejar-support").default;
+const tough = require("tough-cookie");
+axiosCookieJarSupport(axios);
+const cookieJar = new tough.CookieJar();
 
 /* GET home page. */
-router.get("/", function (req, res, next) {
-  axios
-    .post("http://localhost:3000/shop-api", {
+router.get("/", async (req, res, next) => {
+  let http = new axios.create({
+    withCredentials: true,
+  });
+  let response = await axios.post(
+    "http://localhost:3000/shop-api",
+    {
       query: "{products{items{name,id,description,featuredAsset{source}}}}",
-    })
-    .then((res) => {
-      return res.data.data.products.items;
-    })
-    .catch(console.log("Backend down"))
-    .then((data) => {
-      console.log(data);
-      res.render("index", { title: "Express", productList: data });
-    });
+    },
+    { withCredentials: true, proxyHeaders: true, mode: "cors", jar: cookieJar }
+  );
+
+  console.log(cookieJar.getCookiesSync("http://localhost:3000"));
+  res.render("index");
 });
 
 /* GET shop page */
@@ -25,14 +30,19 @@ router.get("/shop", async (req, res) => {
   let pageLength = 12;
   console.log(">>>" + queryBuilder(12, 0, 0) + "<<<");
   let productList = await axios.post("http://localhost:3000/shop-api", {
-    query: queryBuilder(pageLength, req.query.page ? req.query.page - 1 : 0, 0),
+    query: queryBuilder(
+      pageLength,
+      req.query.page ? req.query.page - 1 : 0,
+      0,
+      req.params.collection
+    ),
   });
 
-  console.log(productList.data.data.search);
+  console.log(productList.data.data.search.items);
 
   res.render("shop", {
     productList: productList.data.data.search.items,
-    page: req.query.page ? req.query.page : null,
+    page: req.query.page ? req.query.page : 1,
     totalItems: productList.data.data.search.totalItems,
     pageLength: pageLength,
   });
@@ -50,10 +60,13 @@ router.get("/category/:slug", async (req, res) => {
 
 /* GET detail page */
 
-router.get("/detail/:slug", (req, res, next) => {
-  axios
-    .post("http://localhost:3000/shop-api", {
-      query: `{product(slug: "${req.params.slug}") {
+router.get("/detail/:slug", async (req, res, next) => {
+  let {
+    data: {
+      data: { product },
+    },
+  } = await axios.post("http://localhost:3000/shop-api", {
+    query: `{product(slug: "${req.params.slug}") {
           id
             name
             description
@@ -62,18 +75,21 @@ router.get("/detail/:slug", (req, res, next) => {
             }
           }
         }`,
-    })
-    .then((res) => {
-      return res.data.data.product;
-    })
-    .then((data) => {
-      console.log(data);
-      res.render("detail", {
-        name: data.name,
-        description: data.description,
-        images: data.featuredAsset.source,
-      });
-    });
+  });
+
+  console.log(product);
+  // res.sendStatus(200);
+  res.render("detail", {
+    name: product.name,
+    description: product.description,
+    images: product.featuredAsset.source,
+  });
+});
+
+/* GET cart */
+
+router.get("/cart", (req, res) => {
+  res.render("cart");
 });
 
 module.exports = router;
