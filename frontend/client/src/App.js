@@ -11,6 +11,7 @@ import {
   useHistory,
   useLocation,
 } from "react-router-dom";
+
 import Landing from "./components/Landing";
 import Shop from "./components/Shop";
 import Cart from "./components/Cart";
