@@ -8,20 +8,22 @@ import {
   ApolloClient,
   InMemoryCache,
   ApolloProvider,
-  useQuery,
-  gql,
+  createHttpLink,
 } from "@apollo/client";
 
 const client = new ApolloClient({
-  uri: "http://localhost:3000",
+  uri: "http://localhost:3000/shop-api",
   cache: new InMemoryCache(),
+  credentials: "include",
 });
 
 ReactDOM.render(
   <React.StrictMode>
-    <ProvideContext>
-      <App />
-    </ProvideContext>
+    <ApolloProvider client={client}>
+      <ProvideContext>
+        <App />
+      </ProvideContext>
+    </ApolloProvider>
   </React.StrictMode>,
   document.getElementById("root")
 );

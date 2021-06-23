@@ -1,7 +1,31 @@
 import Header from "./Header";
 import Footer from "./Footer";
+import { useQuery, gql } from "@apollo/client";
+
+//component calls gql server using params/query
+//props.match etc etc
+//and renders out component
 
 const Detail = (props) => {
+  console.log(props.match);
+  const productQuery = gql`
+  query{
+    product(slug: "${props.match.params.slug}") {
+      id
+      name
+      description
+      variants{
+        id
+        priceWithTax
+        sku
+      }
+      featuredAsset{
+        source
+      }
+    }
+  }`;
+  const { loading, error, data } = useQuery(productQuery);
+  console.log(data);
   return (
     <>
       <Header />
@@ -67,10 +91,11 @@ const Detail = (props) => {
                         <i className="fas fa-star small text-warning"></i>
                       </li>
                     </ul>
+                    {/* What does this do?? */}
                     <h2 className="h4">Red digital smartwatch</h2>
                     <p className="text-muted">$250</p>
                     <p className="text-small mb-4">
-                      Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                      Llorem ipsum dolor sit amet, consectetur adipiscing elit.
                       In ut ullamcorper leo, eget euismod orci. Cum sociis
                       natoque penatibus et magnis dis parturient montes nascetur
                       ridiculus mus. Vestibulum ultricies aliquam convallis.
@@ -232,13 +257,12 @@ const Detail = (props) => {
                   <i className="fas fa-star small text-warning"></i>
                 </li>
               </ul>
-              <h1>Red digital smartwatch</h1>
-              <p className="text-muted lead">$250</p>
+              <h1>{data ? data.product.name : "..."}</h1>
+              <p className="text-muted lead">
+                ${data ? data.product.variants[0].priceWithTax / 100 : "..."}
+              </p>
               <p className="text-small mb-4">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. In ut
-                ullamcorper leo, eget euismod orci. Cum sociis natoque penatibus
-                et magnis dis parturient montes nascetur ridiculus mus.
-                Vestibulum ultricies aliquam convallis.
+                {data ? data.product.description : "..."}
               </p>
               <div className="row align-items-stretch mb-4">
                 <div className="col-sm-5 pr-sm-0">
@@ -277,7 +301,9 @@ const Detail = (props) => {
               <ul className="list-unstyled small d-inline-block">
                 <li className="px-3 py-2 mb-1 bg-white">
                   <strong className="text-uppercase">SKU:</strong>
-                  <span className="ml-2 text-muted">039</span>
+                  <span className="ml-2 text-muted">
+                    {data ? data.product.variants[0].sku : "..."}
+                  </span>
                 </li>
                 <li className="px-3 py-2 mb-1 bg-white text-muted">
                   <strong className="text-uppercase text-dark">
@@ -335,14 +361,7 @@ const Detail = (props) => {
               <div className="p-4 p-lg-5 bg-white">
                 <h6 className="text-uppercase">Product description </h6>
                 <p className="text-muted text-small mb-0">
-                  Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed
-                  do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                  Ut enim ad minim veniam, quis nostrud exercitation ullamco
-                  laboris nisi ut aliquip ex ea commodo consequat. Duis aute
-                  irure dolor in reprehenderit in voluptate velit esse cillum
-                  dolore eu fugiat nulla pariatur. Excepteur sint occaecat
-                  cupidatat non proident, sunt in culpa qui officia deserunt
-                  mollit anim id est laborum.
+                  {data ? data.product.description : "..."}
                 </p>
               </div>
             </div>

@@ -12,11 +12,34 @@ import {
   useLocation,
 } from "react-router-dom";
 
+import { useQuery, gql } from "@apollo/client";
+
 import Landing from "./components/Landing";
 import Shop from "./components/Shop";
 import Cart from "./components/Cart";
 import Checkout from "./components/Checkout";
 import Detail from "./components/Detail";
+
+const query = gql`
+  query {
+    search(input: { collectionSlug: "electronics" }) {
+      items {
+        sku
+        slug
+        productName
+        productAsset {
+          preview
+        }
+      }
+    }
+  }
+`;
+
+function RunQuery() {
+  const { loading, error, data } = useQuery(query);
+  console.log(data);
+  return null;
+}
 
 function App() {
   return (
@@ -27,7 +50,7 @@ function App() {
           <Route path="/shop" exact component={Shop} />
           <Route path="/cart" exact component={Cart} />
           <Route path="/checkout" exact component={Checkout} />
-          <Route path="/detail" exact component={Detail} />
+          <Route path="/detail/:slug" exact component={Detail} />
         </Switch>
       </div>
     </Router>
