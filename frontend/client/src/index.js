@@ -11,10 +11,14 @@ import {
   createHttpLink,
 } from "@apollo/client";
 
-const client = new ApolloClient({
+const link = createHttpLink({
   uri: "http://localhost:3000/shop-api",
-  cache: new InMemoryCache(),
   credentials: "include",
+});
+
+const client = new ApolloClient({
+  cache: new InMemoryCache(),
+  link,
 });
 
 ReactDOM.render(

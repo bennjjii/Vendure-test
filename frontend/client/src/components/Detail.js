@@ -1,5 +1,6 @@
 import Header from "./Header";
 import Footer from "./Footer";
+import AddToCartButton from "./AddToCartButton";
 import { useQuery, gql } from "@apollo/client";
 
 //component calls gql server using params/query
@@ -9,23 +10,27 @@ import { useQuery, gql } from "@apollo/client";
 const Detail = (props) => {
   console.log(props.match);
   const productQuery = gql`
-  query{
-    product(slug: "${props.match.params.slug}") {
-      id
-      name
-      description
-      variants{
+    query ProductQuery($slug: String) {
+      product(slug: $slug) {
         id
-        priceWithTax
-        sku
-      }
-      featuredAsset{
-        source
+        name
+        description
+        variants {
+          id
+          priceWithTax
+          sku
+        }
+        featuredAsset {
+          source
+        }
       }
     }
-  }`;
-  const { loading, error, data } = useQuery(productQuery);
+  `;
+  const { loading, error, data } = useQuery(productQuery, {
+    variables: { slug: props.match.params.slug },
+  });
   console.log(data);
+
   return (
     <>
       <Header />
@@ -264,36 +269,11 @@ const Detail = (props) => {
               <p className="text-small mb-4">
                 {data ? data.product.description : "..."}
               </p>
-              <div className="row align-items-stretch mb-4">
-                <div className="col-sm-5 pr-sm-0">
-                  <div className="border d-flex align-items-center justify-content-between py-1 px-3 bg-white border-white">
-                    <span className="small text-uppercase text-gray mr-4 no-select">
-                      Quantity
-                    </span>
-                    <div className="quantity">
-                      <button className="dec-btn p-0">
-                        <i className="fas fa-caret-left"></i>
-                      </button>
-                      <input
-                        className="form-control border-0 shadow-0 p-0"
-                        type="text"
-                        value="1"
-                      />
-                      <button className="inc-btn p-0">
-                        <i className="fas fa-caret-right"></i>
-                      </button>
-                    </div>
-                  </div>
-                </div>
-                <div className="col-sm-3 pl-sm-0">
-                  <a
-                    className="btn btn-dark btn-sm btn-block h-100 d-flex align-items-center justify-content-center px-0"
-                    href="cart.html"
-                  >
-                    Add to cart
-                  </a>
-                </div>
-              </div>
+              <AddToCartButton
+                productVariantId={
+                  data ? data.product.variants[0].id : undefined
+                }
+              />
               <a className="btn btn-link text-dark p-0 mb-4" href="#">
                 <i className="far fa-heart mr-2"></i>Add to wish list
               </a>

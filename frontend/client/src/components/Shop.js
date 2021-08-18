@@ -1,9 +1,44 @@
 import Header from "./Header";
-import ShopProduct from "./ShopProduct";
 import ResultsList from "./ResultsList";
 import Footer from "./Footer";
+import { useQuery, gql } from "@apollo/client";
 
 const Shop = (props) => {
+  const SHOP_QUERY = gql`
+    query ShopQuery(
+      $collectionSlug: String = "electronics"
+      $take: Int = 12
+      $skip: Int = 0
+    ) {
+      search(
+        input: {
+          collectionSlug: $collectionSlug
+          take: $take
+          skip: $skip
+          groupByProduct: true
+        }
+      ) {
+        totalItems
+        items {
+          productId
+          sku
+          productName
+          description
+          productAsset {
+            preview
+          }
+          priceWithTax {
+            ... on PriceRange {
+              min
+            }
+          }
+          slug
+        }
+      }
+    }
+  `;
+  const { loading, error, data } = useQuery(SHOP_QUERY);
+  console.log(data && data.search.items);
   return (
     <>
       <Header />
@@ -445,71 +480,7 @@ const Shop = (props) => {
                     </ul>
                   </div>
                 </div>
-                <ResultsList
-                  productList={[
-                    {
-                      name: "Kui Ye Chen’s AirPods",
-                      imgSrc: "img/product-1.jpg",
-                      price: "250",
-                    },
-                    {
-                      name: "Air Jordan 12 gym red",
-                      imgSrc: "img/product-2.jpg",
-                      price: "300",
-                    },
-                    {
-                      name: "Cyan cotton t-shirt",
-                      imgSrc: "img/product-3.jpg",
-                      price: "25",
-                    },
-                    {
-                      name: "Timex Unisex Originals",
-                      imgSrc: "img/product-4.jpg",
-                      price: "351",
-                    },
-                    {
-                      name: "Red digital smartwatch",
-                      imgSrc: "img/product-5.jpg",
-                      price: "250",
-                    },
-                    {
-                      name: "Nike air max 95",
-                      imgSrc: "img/product-6.jpg",
-                      price: "300",
-                    },
-                    {
-                      name: "Joemalone Women perfume",
-                      imgSrc: "img/product-7.jpg",
-                      price: "25",
-                    },
-                    {
-                      name: "Apple Watch",
-                      imgSrc: "img/product-8.jpg",
-                      price: "351",
-                    },
-                    {
-                      name: "Men silver Byron Watch",
-                      imgSrc: "img/product-9.jpg",
-                      price: "351",
-                    },
-                    {
-                      name: "Polaroid one step camera",
-                      imgSrc: "img/product-10.jpg",
-                      price: "351",
-                      new: true,
-                    },
-                    {
-                      name: "Gray Nike running shoes",
-                      imgSrc: "img/product-11.jpg",
-                      price: "351",
-                    },
-                    {
-                      name: "Black DSLR lense",
-                      imgSrc: "img/product-12.jpg",
-                      price: "351",
-                    },
-                  ]}
-                />
+                <ResultsList data={data} />
 
                 <nav aria-label="Page navigation example">
                   <ul className="pagination justify-content-center justify-content-lg-end">

@@ -4,16 +4,18 @@ const ResultsList = (props) => {
   return (
     <>
       <div className="row">
-        {props.productList.map((item) => {
-          return (
-            <ShopProduct
-              name={item.name}
-              imgSrc={item.imgSrc}
-              price={item.price}
-              new={item.new ? true : false}
-            />
-          );
-        })}
+        {props.data &&
+          props.data.search.items.map((item) => {
+            return (
+              <ShopProduct
+                name={item.productName}
+                imgSrc={item.productAsset.preview}
+                price={item.priceWithTax.min}
+                slug={item.slug}
+                new={item.new ? true : false}
+              />
+            );
+          })}
       </div>
     </>
   );

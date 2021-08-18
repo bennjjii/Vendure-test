@@ -1,6 +1,12 @@
 import { Link } from "react-router-dom";
 
 const ShopProduct = (props) => {
+  const style = {
+    // width: 200,
+    height: 200,
+    objectFit: "cover",
+  };
+
   return (
     <>
       <div className="col-lg-4 col-sm-6">
@@ -12,6 +18,7 @@ const ShopProduct = (props) => {
             <Link className="d-block" to={"/detail/" + props.slug || "/detail"}>
               <img
                 className="img-fluid w-100"
+                style={style}
                 src={props.imgSrc || "http://localhost:5000/img/product-1.jpg"}
                 alt="..."
               />
@@ -45,7 +52,7 @@ const ShopProduct = (props) => {
               {props.name || "Kui Ye Chen’s AirPods"}
             </a>
           </h6>
-          <p className="small text-muted">${props.price || "250"}</p>
+          <p className="small text-muted">${props.price / 100 || "250"}</p>
         </div>
       </div>
     </>

@@ -1,8 +1,33 @@
 import Header from "./Header";
 import CartProduct from "./CartProduct";
 import Footer from "./Footer";
+import { useQuery, gql } from "@apollo/client";
 
 const Cart = (props) => {
+  const GET_ORDER = gql`
+    query {
+      activeOrder {
+        id
+        lines {
+          id
+          featuredAsset {
+            preview
+          }
+          productVariant {
+            id
+            name
+            price
+          }
+          unitPrice
+          quantity
+        }
+      }
+    }
+  `;
+
+  const { loading, error, data } = useQuery(GET_ORDER);
+  console.log(data);
+
   return (
     <>
       <Header />
@@ -176,8 +201,18 @@ const Cart = (props) => {
                     </tr>
                   </thead>
                   <tbody>
-                    <CartProduct />
-                    <CartProduct />
+                    {data &&
+                      data.activeOrder.lines.map((orderLine) => {
+                        return (
+                          <CartProduct
+                            preview={orderLine.featuredAsset.preview}
+                            name={orderLine.productVariant.name}
+                            price={orderLine.unitPrice}
+                            quantity={orderLine.quantity}
+                            productVariantId={orderLine.productVariant.id}
+                          />
+                        );
+                      })}
                   </tbody>
                 </table>
               </div>

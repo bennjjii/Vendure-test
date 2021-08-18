@@ -1,3 +1,8 @@
+const formatter = new Intl.NumberFormat("en-US", {
+  style: "currency",
+  currency: "USD",
+});
+
 function CartProduct(props) {
   return (
     <>
@@ -8,19 +13,19 @@ function CartProduct(props) {
               className="reset-anchor d-block animsition-link"
               href="detail.html"
             >
-              <img src="img/product-detail-3.jpg" alt="..." width="70" />
+              <img src={props.preview} alt="..." width="70" />
             </a>
             <div className="media-body ml-3">
               <strong className="h6">
                 <a className="reset-anchor animsition-link" href="detail.html">
-                  Red digital smartwatch
+                  {props.name}
                 </a>
               </strong>
             </div>
           </div>
         </th>
         <td className="align-middle border-0">
-          <p className="mb-0 small">$250</p>
+          <p className="mb-0 small">{formatter.format(props.price / 100)}</p>
         </td>
         <td className="align-middle border-0">
           <div className="border d-flex align-items-center justify-content-between px-3">
