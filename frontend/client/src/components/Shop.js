@@ -1,18 +1,20 @@
 import Header from "./Header";
 import ResultsList from "./ResultsList";
 import Footer from "./Footer";
+import { useLocation } from "react-router-dom";
 import { useQuery, gql } from "@apollo/client";
 
 const Shop = (props) => {
+  const location = useLocation();
+  const collectionSlug = new URLSearchParams(location.search).get("collection");
+  const collectionSlugSlug =
+    (collectionSlug && `collectionSlug: "${collectionSlug}"`) || "";
+  console.log(collectionSlugSlug);
   const SHOP_QUERY = gql`
-    query ShopQuery(
-      $collectionSlug: String = "electronics"
-      $take: Int = 12
-      $skip: Int = 0
-    ) {
+    query ShopQuery($take: Int = 12, $skip: Int = 0) {
       search(
         input: {
-          collectionSlug: $collectionSlug
+          ${collectionSlugSlug}
           take: $take
           skip: $skip
           groupByProduct: true
