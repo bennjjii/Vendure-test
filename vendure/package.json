@@ -13,10 +13,12 @@
     "migration:revert": "ts-node migration revert"
   },
   "dependencies": {
+    "@types/braintree": "^2.22.14",
     "@vendure/admin-ui-plugin": "1.1.5",
     "@vendure/asset-server-plugin": "1.1.5",
     "@vendure/core": "1.1.5",
     "@vendure/email-plugin": "1.1.5",
+    "braintree": "^3.7.0",
     "pg": "8.7.1",
     "typescript": "4.1.5"
   },

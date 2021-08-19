@@ -7,6 +7,7 @@ import {
 import { defaultEmailHandlers, EmailPlugin } from "@vendure/email-plugin";
 import { AssetServerPlugin } from "@vendure/asset-server-plugin";
 import { AdminUiPlugin } from "@vendure/admin-ui-plugin";
+import { BraintreePlugin } from "./plugins/braintree/braintree-plugin";
 import path from "path";
 
 require("dotenv").config();
@@ -83,5 +84,6 @@ export const config: VendureConfig = {
       route: "admin",
       port: 3002,
     }),
+    BraintreePlugin,
   ],
 };
