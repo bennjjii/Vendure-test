@@ -1,4 +1,4 @@
-# backend
+# vendure2
 
 This project was generated with [`@vendure/create`](https://github.com/vendure-ecommerce/vendure/tree/master/packages/create).
 

@@ -1,1 +1,1 @@
-cd vendure4/; npm run start;
+cd vendure/; npm run start;

@@ -1,29 +1,31 @@
-const {
+import {
   dummyPaymentHandler,
   DefaultJobQueuePlugin,
   DefaultSearchPlugin,
-} = require("@vendure/core");
-const { defaultEmailHandlers, EmailPlugin } = require("@vendure/email-plugin");
-const { AssetServerPlugin } = require("@vendure/asset-server-plugin");
-const { AdminUiPlugin } = require("@vendure/admin-ui-plugin");
-const path = require("path");
+  VendureConfig,
+} from "@vendure/core";
+import { defaultEmailHandlers, EmailPlugin } from "@vendure/email-plugin";
+import { AssetServerPlugin } from "@vendure/asset-server-plugin";
+import { AdminUiPlugin } from "@vendure/admin-ui-plugin";
+import path from "path";
+
 require("dotenv").config();
 
-const config = {
+export const config: VendureConfig = {
   apiOptions: {
     port: 3000,
     adminApiPath: "admin-api",
     adminApiPlayground: {
       settings: {
         "request.credentials": "include",
-      },
+      } as any,
     }, // turn this off for production
     adminApiDebug: true, // turn this off for production
     shopApiPath: "shop-api",
     shopApiPlayground: {
       settings: {
         "request.credentials": "include",
-      },
+      } as any,
     }, // turn this off for production
     shopApiDebug: true, // turn this off for production
   },
@@ -44,7 +46,7 @@ const config = {
     type: "postgres",
     synchronize: true, // turn this off for production
     logging: false,
-    database: "vendure4",
+    database: "vendure",
     host: "localhost",
     port: 5432,
     username: "dbadmin",
@@ -83,5 +85,3 @@ const config = {
     }),
   ],
 };
-
-module.exports = { config };
