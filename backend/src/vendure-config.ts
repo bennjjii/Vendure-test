@@ -7,6 +7,7 @@ import {
 import { defaultEmailHandlers, EmailPlugin } from "@vendure/email-plugin";
 import { AssetServerPlugin } from "@vendure/asset-server-plugin";
 import { AdminUiPlugin } from "@vendure/admin-ui-plugin";
+//import { BraintreePlugin } from "./plugins/braintree/braintree-plugin";
 import path from "path";
 require("dotenv").config();
 
@@ -35,8 +36,7 @@ export const config: VendureConfig = {
     },
     tokenMethod: "cookie",
     cookieOptions: {
-      secret:
-        "001c43f1d080bfab2db804c04829af0d7bb49ff27113bdd4ab87d24d100851f0c663c09a917a41eb201eaed87e0e68585308d712fd1d176536067f4ff79d3d62",
+      secret: process.env.SESSION_SECRET,
       httpOnly: false,
       // signed: false,
       // secure: false,
@@ -81,5 +81,6 @@ export const config: VendureConfig = {
       },
     }),
     AdminUiPlugin.init({ port: 3002 }),
+    //BraintreePlugin,
   ],
 };

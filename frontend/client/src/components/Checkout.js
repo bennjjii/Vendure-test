@@ -1,120 +1,86 @@
+import { Link } from "react-router-dom";
+import { useQuery, gql } from "@apollo/client";
 import Header from "./Header";
 import Footer from "./Footer";
+import CheckoutProduct from "./CheckoutProduct";
+import {
+  Elements,
+  CardElement,
+  useElements,
+  useStripe,
+} from "@stripe/react-stripe-js";
+import { loadStripe } from "@stripe/stripe-js";
+
+const formatter = new Intl.NumberFormat("en-US", {
+  style: "currency",
+  currency: "USD",
+});
 
 const Checkout = (props) => {
+  const stripe = useStripe();
+  const elements = useElements();
+  const GET_ORDER = gql`
+    query {
+      activeOrder {
+        id
+        lines {
+          id
+          featuredAsset {
+            preview
+          }
+          productVariant {
+            id
+            name
+            price
+            product {
+              slug
+            }
+          }
+          unitPrice
+          quantity
+          linePriceWithTax
+        }
+        subTotal
+        subTotalWithTax
+        total
+        totalWithTax
+      }
+    }
+  `;
+  const { loading, error, data } = useQuery(GET_ORDER);
+
+  const handleSubmit = async (event) => {
+    // Block native form submission.
+    event.preventDefault();
+
+    if (!stripe || !elements) {
+      // Stripe.js has not loaded yet. Make sure to disable
+      // form submission until Stripe.js has loaded.
+      return;
+    }
+
+    // Get a reference to a mounted CardElement. Elements knows how
+    // to find your CardElement because there can only ever be one of
+    // each type of element.
+    const cardElement = elements.getElement(CardElement);
+
+    // Use your card Element with other Stripe.js APIs
+    const { error, paymentMethod } = await stripe.createPaymentMethod({
+      type: "card",
+      card: cardElement,
+    });
+
+    if (error) {
+      console.log("[error]", error);
+    } else {
+      console.log("[PaymentMethod]", paymentMethod);
+    }
+  };
+
   return (
     <>
       <Header />
-      <div
-        className="modal fade"
-        id="productView"
-        tabindex="-1"
-        role="dialog"
-        aria-hidden="true"
-      >
-        <div
-          className="modal-dialog modal-lg modal-dialog-centered"
-          role="document"
-        >
-          <div className="modal-content">
-            <div className="modal-body p-0">
-              <div className="row align-items-stretch">
-                <div className="col-lg-6 p-lg-0">
-                  <a
-                    className="product-view d-block h-100 bg-cover bg-center"
-                    style={{ background: "url(img/product-5.jpg)" }}
-                    href="img/product-5.jpg"
-                    data-lightbox="productview"
-                    title="Red digital smartwatch"
-                  ></a>
-                  <a
-                    className="d-none"
-                    href="img/product-5-alt-1.jpg"
-                    title="Red digital smartwatch"
-                    data-lightbox="productview"
-                  ></a>
-                  <a
-                    className="d-none"
-                    href="img/product-5-alt-2.jpg"
-                    title="Red digital smartwatch"
-                    data-lightbox="productview"
-                  ></a>
-                </div>
-                <div className="col-lg-6">
-                  <button
-                    className="close p-4"
-                    type="button"
-                    data-dismiss="modal"
-                    aria-label="Close"
-                  >
-                    <span aria-hidden="true">×</span>
-                  </button>
-                  <div className="p-5 my-md-4">
-                    <ul className="list-inline mb-2">
-                      <li className="list-inline-item m-0">
-                        <i className="fas fa-star small text-warning"></i>
-                      </li>
-                      <li className="list-inline-item m-0">
-                        <i className="fas fa-star small text-warning"></i>
-                      </li>
-                      <li className="list-inline-item m-0">
-                        <i className="fas fa-star small text-warning"></i>
-                      </li>
-                      <li className="list-inline-item m-0">
-                        <i className="fas fa-star small text-warning"></i>
-                      </li>
-                      <li className="list-inline-item m-0">
-                        <i className="fas fa-star small text-warning"></i>
-                      </li>
-                    </ul>
-                    <h2 className="h4">Red digital smartwatch</h2>
-                    <p className="text-muted">$250</p>
-                    <p className="text-small mb-4">
-                      Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                      In ut ullamcorper leo, eget euismod orci. Cum sociis
-                      natoque penatibus et magnis dis parturient montes nascetur
-                      ridiculus mus. Vestibulum ultricies aliquam convallis.
-                    </p>
-                    <div className="row align-items-stretch mb-4">
-                      <div className="col-sm-7 pr-sm-0">
-                        <div className="border d-flex align-items-center justify-content-between py-1 px-3">
-                          <span className="small text-uppercase text-gray mr-4 no-select">
-                            Quantity
-                          </span>
-                          <div className="quantity">
-                            <button className="dec-btn p-0">
-                              <i className="fas fa-caret-left"></i>
-                            </button>
-                            <input
-                              className="form-control border-0 shadow-0 p-0"
-                              type="text"
-                              value="1"
-                            />
-                            <button className="inc-btn p-0">
-                              <i className="fas fa-caret-right"></i>
-                            </button>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="col-sm-5 pl-sm-0">
-                        <a
-                          className="btn btn-dark btn-sm btn-block h-100 d-flex align-items-center justify-content-center px-0"
-                          href="cart.html"
-                        >
-                          Add to cart
-                        </a>
-                      </div>
-                    </div>
-                    <a className="btn btn-link text-dark p-0" href="#">
-                      <i className="far fa-heart mr-2"></i>Add to wish list
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+
       <div className="container">
         <section className="py-5 bg-light">
           <div className="container">
@@ -126,10 +92,10 @@ const Checkout = (props) => {
                 <nav aria-label="breadcrumb">
                   <ol className="breadcrumb justify-content-lg-end mb-0 px-0">
                     <li className="breadcrumb-item">
-                      <a href="index.html">Home</a>
+                      <Link to="/">Home</Link>
                     </li>
                     <li className="breadcrumb-item">
-                      <a href="cart.html">Cart</a>
+                      <Link to="/cart">Cart</Link>
                     </li>
                     <li className="breadcrumb-item active" aria-current="page">
                       Checkout
@@ -144,7 +110,7 @@ const Checkout = (props) => {
           <h2 className="h5 text-uppercase mb-4">Billing details</h2>
           <div className="row">
             <div className="col-lg-8">
-              <form action="#">
+              <form onSubmit={handleSubmit}>
                 <div className="row">
                   <div className="col-lg-6 form-group">
                     <label
@@ -256,6 +222,27 @@ const Checkout = (props) => {
                       className="form-control form-control-lg"
                       id="state"
                       type="text"
+                    />
+                  </div>
+                  <div className="col-lg-6 form-group">
+                    <label className="text-small text-uppercase">
+                      Payment Details
+                    </label>
+                    <CardElement
+                      options={{
+                        style: {
+                          base: {
+                            fontSize: "16px",
+                            color: "#424770",
+                            "::placeholder": {
+                              color: "#aab7c4",
+                            },
+                          },
+                          invalid: {
+                            color: "#9e2146",
+                          },
+                        },
+                      }}
                     />
                   </div>
                   <div className="col-lg-6 form-group">
@@ -422,7 +409,11 @@ const Checkout = (props) => {
                     </div>
                   </div>
                   <div className="col-lg-12 form-group">
-                    <button className="btn btn-dark" type="submit">
+                    <button
+                      className="btn btn-dark"
+                      type="submit"
+                      disabled={!stripe}
+                    >
                       Place order
                     </button>
                   </div>
@@ -435,25 +426,25 @@ const Checkout = (props) => {
                 <div className="card-body">
                   <h5 className="text-uppercase mb-4">Your order</h5>
                   <ul className="list-unstyled mb-0">
-                    <li className="d-flex align-items-center justify-content-between">
-                      <strong className="small font-weight-bold">
-                        Red digital smartwatch
-                      </strong>
-                      <span className="text-muted small">$250</span>
-                    </li>
-                    <li className="border-bottom my-2"></li>
-                    <li className="d-flex align-items-center justify-content-between">
-                      <strong className="small font-weight-bold">
-                        Gray Nike running shoes
-                      </strong>
-                      <span className="text-muted small">$351</span>
-                    </li>
-                    <li className="border-bottom my-2"></li>
+                    {data &&
+                      data.activeOrder &&
+                      data.activeOrder.lines.map((orderLine) => {
+                        return (
+                          <CheckoutProduct
+                            name={orderLine.productVariant.name}
+                            linePrice={orderLine.linePriceWithTax}
+                          />
+                        );
+                      })}
                     <li className="d-flex align-items-center justify-content-between">
                       <strong className="text-uppercase small font-weight-bold">
                         Total
                       </strong>
-                      <span>$601</span>
+                      <span>
+                        {data &&
+                          data.activeOrder &&
+                          formatter.format(data.activeOrder.totalWithTax / 100)}
+                      </span>
                     </li>
                   </ul>
                 </div>

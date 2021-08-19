@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 const formatter = new Intl.NumberFormat("en-US", {
   style: "currency",
   currency: "USD",
@@ -9,17 +11,20 @@ function CartProduct(props) {
       <tr>
         <th className="pl-0 border-0" scope="row">
           <div className="media align-items-center">
-            <a
+            <Link
               className="reset-anchor d-block animsition-link"
-              href="detail.html"
+              to={props.slug}
             >
               <img src={props.preview} alt="..." width="70" />
-            </a>
+            </Link>
             <div className="media-body ml-3">
               <strong className="h6">
-                <a className="reset-anchor animsition-link" href="detail.html">
+                <Link
+                  className="reset-anchor animsition-link"
+                  to={"detail/" + props.slug}
+                >
                   {props.name}
-                </a>
+                </Link>
               </strong>
             </div>
           </div>

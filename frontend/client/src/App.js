@@ -11,6 +11,13 @@ import {
   useHistory,
   useLocation,
 } from "react-router-dom";
+import {
+  Elements,
+  CardElement,
+  useElements,
+  useStripe,
+} from "@stripe/react-stripe-js";
+import { loadStripe } from "@stripe/stripe-js";
 
 import { useQuery, gql } from "@apollo/client";
 
@@ -19,7 +26,7 @@ import Shop from "./components/Shop";
 import Cart from "./components/Cart";
 import Checkout from "./components/Checkout";
 import Detail from "./components/Detail";
-
+const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLIC_KEY);
 const query = gql`
   query {
     search(input: { collectionSlug: "electronics" }) {
@@ -49,8 +56,10 @@ function App() {
           <Route path="/" exact component={Landing} />
           <Route path="/shop" exact component={Shop} />
           <Route path="/cart" exact component={Cart} />
-          <Route path="/checkout" exact component={Checkout} />
           <Route path="/detail/:slug" exact component={Detail} />
+          <Elements stripe={stripePromise}>
+            <Route path="/checkout" exact component={Checkout} />
+          </Elements>
         </Switch>
       </div>
     </Router>
