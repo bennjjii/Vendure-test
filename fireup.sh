@@ -1,1 +1,1 @@
-cd backend/; npm run start;
+cd vendure4/; npm run start;

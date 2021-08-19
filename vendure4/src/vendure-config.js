@@ -1,31 +1,29 @@
-import {
-  examplePaymentHandler,
+const {
+  dummyPaymentHandler,
   DefaultJobQueuePlugin,
   DefaultSearchPlugin,
-  VendureConfig,
-} from "@vendure/core";
-import { defaultEmailHandlers, EmailPlugin } from "@vendure/email-plugin";
-import { AssetServerPlugin } from "@vendure/asset-server-plugin";
-import { AdminUiPlugin } from "@vendure/admin-ui-plugin";
-//import { BraintreePlugin } from "./plugins/braintree/braintree-plugin";
-import path from "path";
+} = require("@vendure/core");
+const { defaultEmailHandlers, EmailPlugin } = require("@vendure/email-plugin");
+const { AssetServerPlugin } = require("@vendure/asset-server-plugin");
+const { AdminUiPlugin } = require("@vendure/admin-ui-plugin");
+const path = require("path");
 require("dotenv").config();
 
-export const config: VendureConfig = {
+const config = {
   apiOptions: {
     port: 3000,
     adminApiPath: "admin-api",
     adminApiPlayground: {
       settings: {
         "request.credentials": "include",
-      } as any,
+      },
     }, // turn this off for production
     adminApiDebug: true, // turn this off for production
     shopApiPath: "shop-api",
     shopApiPlayground: {
       settings: {
         "request.credentials": "include",
-      } as any,
+      },
     }, // turn this off for production
     shopApiDebug: true, // turn this off for production
   },
@@ -37,16 +35,16 @@ export const config: VendureConfig = {
     tokenMethod: "cookie",
     cookieOptions: {
       secret: process.env.SESSION_SECRET,
-      httpOnly: false,
+      //httpOnly: false,
       // signed: false,
       // secure: false,
     },
   },
   dbConnectionOptions: {
     type: "postgres",
-    synchronize: false, // turn this off for production
+    synchronize: true, // turn this off for production
     logging: false,
-    database: "vendure",
+    database: "vendure4",
     host: "localhost",
     port: 5432,
     username: "dbadmin",
@@ -54,7 +52,7 @@ export const config: VendureConfig = {
     migrations: [path.join(__dirname, "../migrations/*.ts")],
   },
   paymentOptions: {
-    paymentMethodHandlers: [examplePaymentHandler],
+    paymentMethodHandlers: [dummyPaymentHandler],
   },
   customFields: {},
   plugins: [
@@ -65,9 +63,9 @@ export const config: VendureConfig = {
     DefaultJobQueuePlugin,
     DefaultSearchPlugin,
     EmailPlugin.init({
-      route: "mailbox",
       devMode: true,
       outputPath: path.join(__dirname, "../static/email/test-emails"),
+      route: "mailbox",
       handlers: defaultEmailHandlers,
       templatePath: path.join(__dirname, "../static/email/templates"),
       globalTemplateVars: {
@@ -83,6 +81,7 @@ export const config: VendureConfig = {
       route: "admin",
       port: 3002,
     }),
-    //BraintreePlugin,
   ],
 };
+
+module.exports = { config };
