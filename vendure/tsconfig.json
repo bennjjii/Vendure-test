@@ -9,8 +9,7 @@
     "strict": true,
     "sourceMap": false,
     "outDir": "./dist",
-    "baseUrl": "./",
-    "typeRoots": ["./node_modules/@types/", "./types/"]
+    "baseUrl": "./"
   },
   "exclude": ["node_modules", "migration.ts"]
 }

@@ -20,7 +20,7 @@ export const stripePaymentMethodHandler = new PaymentMethodHandler({
   description: [
     {
       languageCode: LanguageCode.en,
-      value: "stripe_description",
+      value: "stripe",
     },
   ],
   args: {

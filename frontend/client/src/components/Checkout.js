@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { useQuery, gql } from "@apollo/client";
+import { useQuery, gql, useMutation } from "@apollo/client";
 import Header from "./Header";
 import Footer from "./Footer";
 import CheckoutProduct from "./CheckoutProduct";
@@ -47,11 +47,50 @@ const Checkout = (props) => {
       }
     }
   `;
+
+  const CREATE_CUSTOMER = gql`
+    mutation (
+      $title: String
+      $firstName: String!
+      $lastName: String!
+      $emailAddress: String!
+      $phoneNumber: String
+    ) {
+      setCustomerForOrder(
+        input: {
+          title: $title
+          firstName: $firstName
+          lastName: $lastName
+          emailAddress: $emailAddress
+          phoneNumber: $phoneNumber
+        }
+      ) {
+        __typename
+      }
+    }
+  `;
   const { loading, error, data } = useQuery(GET_ORDER);
+  const [setCustomerForOrder, { loading_2, error_2 }] =
+    useMutation(CREATE_CUSTOMER);
 
   const handleSubmit = async (event) => {
     // Block native form submission.
     event.preventDefault();
+
+    // try {
+    //   let res = setCustomerForOrder({
+    //     variables: {
+    //       title: "Mr",
+    //       firstName: "Ben",
+    //       lastName: "R",
+    //       emailAddress: "ben@r.com",
+    //       phoneNumber: "01625625364",
+    //     },
+    //   });
+    //   console.log(res);
+    // } catch (e) {
+    //   console.log(e);
+    // }
 
     if (!stripe || !elements) {
       // Stripe.js has not loaded yet. Make sure to disable
