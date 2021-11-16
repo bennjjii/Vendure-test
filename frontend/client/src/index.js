@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import "./css/index.css";
-import { ProvideContext } from "./services/contextService";
+import { ProvideCtx } from "./components/services/context";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import {
@@ -24,9 +24,9 @@ const client = new ApolloClient({
 ReactDOM.render(
   <React.StrictMode>
     <ApolloProvider client={client}>
-      <ProvideContext>
+      <ProvideCtx>
         <App />
-      </ProvideContext>
+      </ProvideCtx>
     </ApolloProvider>
   </React.StrictMode>,
   document.getElementById("root")

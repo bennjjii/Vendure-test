@@ -40,61 +40,14 @@ const Detail = (props) => {
           <div className="row mb-5">
             <div className="col-lg-6">
               <div className="row m-sm-0">
-                {/*      <div className="col-sm-2 p-sm-0 order-2 order-sm-1 mt-2 mt-sm-0">
-               <div
-                    className="owl-thumbs d-flex flex-row flex-sm-column"
-                    data-slider-id="1"
-                  >
-                    <div className="owl-thumb-item flex-fill mb-2 mr-2 mr-sm-0">
-                      <img
-                        className="w-100"
-                        src={data && data.product.featuredAsset.source}
-                        alt="..."
-                      />
-                    </div>
-                    <div className="owl-thumb-item flex-fill mb-2 mr-2 mr-sm-0">
-                      <img
-                        className="w-100"
-                        src="img/product-detail-2.jpg"
-                        alt="..."
-                      />
-                    </div>
-                    <div className="owl-thumb-item flex-fill mb-2 mr-2 mr-sm-0">
-                      <img
-                        className="w-100"
-                        src="img/product-detail-3.jpg"
-                        alt="..."
-                      />
-                    </div>
-                    <div className="owl-thumb-item flex-fill mb-2">
-                      <img
-                        className="w-100"
-                        src="img/product-detail-4.jpg"
-                        alt="..."
-                      />
-                    </div>
-                  </div>
-                </div>*/}
                 <div className="col-sm-10 order-1 order-sm-2">
-                  <div
-                    className="owl-carousel product-slider"
-                    data-slider-id="1"
-                  >
-                    <a
-                      className="d-block"
-                      href="img/product-detail-1.jpg"
-                      data-lightbox="product"
-                      title="Product item 1"
-                    >
-                      {data && (
-                        <img
-                          className="img-fluid"
-                          src={data.product.featuredAsset.source}
-                          alt="..."
-                        />
-                      )}
-                    </a>
-                  </div>
+                  {data && (
+                    <img
+                      className="img-detail-main-img"
+                      src={data.product.featuredAsset.source}
+                      alt="..."
+                    />
+                  )}
                 </div>
               </div>
             </div>
@@ -118,6 +71,7 @@ const Detail = (props) => {
                 </li>
               </ul>
               <h1>{data ? data.product.name : "..."}</h1>
+
               <p className="text-muted lead">
                 ${data ? data.product.variants[0].priceWithTax / 100 : "..."}
               </p>
