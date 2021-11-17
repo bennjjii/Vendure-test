@@ -1,5 +1,6 @@
 import Header from "./Header";
 import ResultsList from "./ResultsList";
+import Paginator from "./Paginator";
 import Footer from "./Footer";
 import { useLocation } from "react-router-dom";
 import { useQuery, gql } from "@apollo/client";
@@ -10,13 +11,14 @@ const Shop = (props) => {
   const auth = useAuth();
   const location = useLocation();
   const collectionSlug = new URLSearchParams(location.search).get("collection");
-  const page = new URLSearchParams(location.search).get("page");
+  const page = parseInt(new URLSearchParams(location.search).get("page")) || 1;
+  const pageLength = 12;
 
   const pageSlug = page > 0 ? (page - 1) * 12 : 0;
 
   //${collectionSlugSlug}
   const SHOP_QUERY = gql`
-    query ShopQuery($take: Int = 12, $skip: Int = 0, $collectionSlug: String) {
+    query ShopQuery($take: Int, $skip: Int = 0, $collectionSlug: String) {
       search(
         input: {
           collectionSlug: $collectionSlug
@@ -46,11 +48,12 @@ const Shop = (props) => {
   `;
   const { loading, error, data } = useQuery(SHOP_QUERY, {
     variables: {
+      take: pageLength,
       skip: pageSlug,
       collectionSlug: collectionSlug,
     },
   });
-  //console.log(data && data.search.items);
+  console.log(data && data.search.totalItems);
   const collectionResults = auth.useQueryCollections();
   //console.log(collectionResults);
   return (
@@ -236,35 +239,11 @@ const Shop = (props) => {
                 </div>
                 <ResultsList data={data} />
 
-                <nav aria-label="Page navigation example">
-                  <ul className="pagination justify-content-center justify-content-lg-end">
-                    <li className="page-item">
-                      <a className="page-link" href="#" aria-label="Previous">
-                        <span aria-hidden="true">«</span>
-                      </a>
-                    </li>
-                    <li className="page-item active">
-                      <a className="page-link" href="#">
-                        1
-                      </a>
-                    </li>
-                    <li className="page-item">
-                      <a className="page-link" href="#">
-                        2
-                      </a>
-                    </li>
-                    <li className="page-item">
-                      <a className="page-link" href="#">
-                        3
-                      </a>
-                    </li>
-                    <li className="page-item">
-                      <a className="page-link" href="#" aria-label="Next">
-                        <span aria-hidden="true">»</span>
-                      </a>
-                    </li>
-                  </ul>
-                </nav>
+                <Paginator
+                  totalItems={data && data.search.totalItems}
+                  pageLength={pageLength}
+                  page={page}
+                />
               </div>
             </div>
           </div>
