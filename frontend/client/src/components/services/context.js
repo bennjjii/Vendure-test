@@ -1,5 +1,5 @@
 import { createContext, useContext, useState } from "react";
-import { useQuery, gql } from "@apollo/client";
+import { useQuery, useMutation, gql } from "@apollo/client";
 
 export const appContext = createContext();
 
@@ -7,9 +7,18 @@ export function useAuth() {
   return useContext(appContext);
 }
 
+const ADD_TO_CART = gql`
+  mutation ($productVariantId: ID!, $quantity: Int!) {
+    addItemToOrder(productVariantId: $productVariantId, quantity: $quantity) {
+      __typename
+    }
+  }
+`;
+
 function useAppContext() {
   // Put global variables and functions that aren't managed by the backend here
   const a = "banana";
+  //this should be a global place where the shop query is handled and any filters categories pages etc are set
   const useQueryCollections = () => {
     const COLLECTION_QUERY = gql`
       query CollectionQuery {
@@ -36,9 +45,12 @@ function useAppContext() {
     };
   };
 
+  const [addToCart, { loading, error }] = useMutation(ADD_TO_CART);
+
   return {
     a,
     useQueryCollections,
+    addToCart,
   };
 }
 

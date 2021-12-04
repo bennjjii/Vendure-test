@@ -53,9 +53,9 @@ const Shop = (props) => {
       collectionSlug: collectionSlug,
     },
   });
-  console.log(data && data.search.totalItems);
+  //console.log(data && data.search.totalItems);
   const collectionResults = auth.useQueryCollections();
-  //console.log(collectionResults);
+  console.log(collectionResults);
   return (
     <>
       <Header />

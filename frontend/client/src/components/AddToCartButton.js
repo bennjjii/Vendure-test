@@ -1,15 +1,8 @@
 import { gql, useMutation } from "@apollo/client";
+import { useAuth } from "./services/context";
 
 function AddToCartButton(props) {
-  const ADD_TO_CART = gql`
-    mutation ($productVariantId: ID!, $quantity: Int!) {
-      addItemToOrder(productVariantId: $productVariantId, quantity: $quantity) {
-        __typename
-      }
-    }
-  `;
-
-  const [addToCart, { loading, error }] = useMutation(ADD_TO_CART);
+  const auth = useAuth();
   return (
     <div className="row align-items-stretch mb-4">
       <p>{props.productVariantId}</p>
@@ -37,7 +30,7 @@ function AddToCartButton(props) {
         <button
           className="btn btn-dark btn-sm btn-block h-100 d-flex align-items-center justify-content-center px-0"
           onClick={() => {
-            addToCart({
+            auth.addToCart({
               variables: {
                 productVariantId: props.productVariantId,
                 quantity: 1,
